@@ -1,0 +1,7 @@
+CHANGES
+=======
+
+* add setup.py file
+* remove example
+* Setup publishing to pypi
+* initial commit
