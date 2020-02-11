@@ -2,7 +2,7 @@ import asyncio
 
 
 async def do_gather(*coroutines, allowed_exc):
-    pending = futures = list(map(asyncio.ensure_future, coroutines))
+    pending = list(map(asyncio.ensure_future, coroutines))
     try:
         await asyncio.gather(*pending)
     except allowed_exc:

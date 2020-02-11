@@ -29,10 +29,11 @@ def decrement(amount, index):
 
 saga_builder = SagaBuilder.create()
 
-saga = saga_builder\
-    .add_step(lambda: add(amount, 0), lambda: decrement(amount, 0))\
-    .add_step(lambda: add(amount, 1), lambda: decrement(amount, 1))\
+saga = (
+    saga_builder.add_step(lambda: add(amount, 0), lambda: decrement(amount, 0))
+    .add_step(lambda: add(amount, 1), lambda: decrement(amount, 1))
     .build()
+)
 
 if __name__ == "__main__":
     asyncio.run(saga.run(exceptions=(OSError)))

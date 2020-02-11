@@ -1,7 +1,5 @@
-import asyncio
 from collections.abc import Sequence
 from .event_gather import do_gather
-from .exceptions import SagaException
 from .states import State, StepStates
 from .step import Step
 from typing import List
@@ -18,8 +16,6 @@ class Saga(StepStates):
         super().__init__()
 
     async def run(self, *args, executor=None, exceptions=None, **kwargs):
-        loop = asyncio.get_event_loop()
-
         futures = [step.do_run(*args, **kwargs) for step in self.steps]
         await do_gather(*futures, allowed_exc=(exceptions))
         failure = any([step.failure for step in self.steps])
