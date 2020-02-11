@@ -2,7 +2,6 @@ import asyncio
 from abc import abstractmethod
 from inspect import iscoroutinefunction as is_coroutine
 from .states import State, StepStates
-from .exceptions import SagaException
 
 
 class BaseStep(StepStates):
@@ -14,11 +13,13 @@ class BaseStep(StepStates):
             self._state = State.FAILURE
             raise error
         self._state = State.SUCCESS
+        return res
 
     async def do_compensate(self, *args, **kwargs):
         self._state = State.RUNNING
         res = await self.compensate(*args, **kwargs)
         self._state = State.COMPENSATED
+        return res
 
     @abstractmethod
     async def run(self, *args, **kwargs):
@@ -35,11 +36,10 @@ class Step(BaseStep):
     """
 
     def __init__(self, func, compensation=None):
-        assert callable(func) == True, "'func' argument must be callable"
+        assert callable(func) is True, "'func' argument must be callable"
         self.func = func
         if compensation:
-            assert callable(
-                compensation) == True, "'func' argument must be callable"
+            assert callable(compensation) is True, "'func' argument must be callable"
             self.compensation = compensation
 
         super().__init__()

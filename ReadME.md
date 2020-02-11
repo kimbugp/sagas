@@ -1,4 +1,4 @@
-
+![Tests](https://github.com/kimbugp/sagas/workflows/Tests/badge.svg) [![PyPI version](https://badge.fury.io/py/pysagas.svg)](https://badge.fury.io/py/pysagas) ![Publish](https://github.com/kimbugp/sagas/workflows/Publish/badge.svg)
 # SAGAS
 
 A simple async sagas implementation

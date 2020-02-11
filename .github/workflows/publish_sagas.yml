@@ -1,9 +1,9 @@
-name: Upload
+name: Publish
 
 on:
   release:
     types: [created]
-
+  pull_request:
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -17,9 +17,6 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install setuptools wheel twine
-      - name: run tests
-        run: |
-          python -m pytest
       - name: Build and publish
         env:
           TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}

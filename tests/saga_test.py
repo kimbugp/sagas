@@ -1,6 +1,4 @@
-from unittest import TestCase
-from unittest.mock import Mock
-from sagas import Saga, SagaException, SagaBuilder, Step
+from sagas import Saga, SagaBuilder, Step
 
 
 class BaseTestCase(object):
@@ -12,7 +10,6 @@ class BaseTestCase(object):
 
 
 class TestSaga(BaseTestCase):
-
     def test_run_step_succeeds(self, event_loop):
         counters = [0, 10]
 
@@ -21,7 +18,8 @@ class TestSaga(BaseTestCase):
 
         step_1 = Step(action)
         event_loop.run_until_complete(
-            Saga([step_1]).run(exceptions=(OSError, Exception)))
+            Saga([step_1]).run(exceptions=(OSError, Exception))
+        )
         self.assertEqual(counters[0], 1)
 
     def test_multiple_steps_succeed(self, event_loop):
@@ -36,7 +34,8 @@ class TestSaga(BaseTestCase):
         step_3 = Step(lambda: action(3))
 
         event_loop.run_until_complete(
-            Saga([step_0, step_1, step_2, step_3]).run(exceptions=(OSError)))
+            Saga([step_0, step_1, step_2, step_3]).run(exceptions=(OSError))
+        )
         self.assertEqual(counters, [1, 1, 1, 1])
 
     def test_step_fails(self, event_loop):
@@ -44,12 +43,11 @@ class TestSaga(BaseTestCase):
 
         async def action():
             counters[0] += 1
-            raise Exception('test_step_fails')
+            raise Exception("test_step_fails")
 
         step_1 = Step(action)
         try:
-            event_loop.run_until_complete(
-                Saga([step_1]).run(exceptions=(OSError)))
+            event_loop.run_until_complete(Saga([step_1]).run(exceptions=(OSError)))
         except Exception as error:
             assert isinstance(error, Exception) is True
 
@@ -58,14 +56,15 @@ class TestSaga(BaseTestCase):
 
         async def action():
             counters[0] += 1
-            raise Exception('test_step_fails')
+            raise Exception("test_step_fails")
 
         async def comp():
             counters[0] -= 1
 
         step_1 = Step(action, comp)
         event_loop.run_until_complete(
-            Saga([step_1]).run(exceptions=(OSError, Exception)))
+            Saga([step_1]).run(exceptions=(OSError, Exception))
+        )
         self.assertEqual(counters[0], 0)
 
 
@@ -79,9 +78,6 @@ class TestSagaBuilder(BaseTestCase):
         async def comp():
             counters[0] -= 1
 
-        saga = SagaBuilder \
-            .create() \
-            .add_step(action, comp) \
-            .build()
+        saga = SagaBuilder.create().add_step(action, comp).build()
         event_loop.run_until_complete(saga.run(exceptions=(OSError)))
         self.assertEqual(counters[0], 1)
