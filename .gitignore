@@ -1,3 +1,4 @@
 .eggs/
 dist/
 pysagas.egg-info/
+__pycache__

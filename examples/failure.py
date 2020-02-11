@@ -1,5 +1,4 @@
 import asyncio
-
 from sagas import SagaBuilder
 
 counter = [10, 20]
@@ -14,6 +13,7 @@ def add(amount, index):
         index (int): index of value to increment
     """
     counter[index] += amount
+    raise Exception('error occurred')
 
 
 def decrement(amount, index):
@@ -35,5 +35,5 @@ saga = saga_builder\
     .build()
 
 if __name__ == "__main__":
-    asyncio.run(saga.run(exceptions=(OSError)))
-    print(counter)  # [40, 50]
+    asyncio.run(saga.run(exceptions=(OSError, Exception)))
+    print(counter)  # [10, 20]
