@@ -1,5 +1,5 @@
 import asyncio
-from collections import Sequence
+from collections.abc import Sequence
 from .event_gather import do_gather
 from .exceptions import SagaException
 from .states import State, StepStates
